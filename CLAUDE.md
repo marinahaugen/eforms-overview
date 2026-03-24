@@ -48,6 +48,25 @@ Auto-deploys on push (~30 seconds).
 - **BT→codelist mapping**: `sdk-reference/bt_codelist_map.json` (extracted from EU SDK `fields.json`)
 - **Codelist→filename mapping**: `sdk-reference/codelist_filenames.json` (extracted from EU SDK `codelists.json`)
 
+## Testing
+
+Data integrity tests verify the HTML output matches the Excel source of truth:
+
+```bash
+cd /Users/marina/bootcamp
+python3 -m pytest test_eforms_overview.py -v
+```
+
+25 tests covering: field counts, Excel comparison (row-by-row), wizard step assignment, codelist mappings, Norwegian SDK values, BFF mapping status, and HTML output sanity. Run after regenerating to catch data mismatches before deploying.
+
+## Gotchas
+
+- Build requires internet — fetches ~60 EU SDK `.gc` files from GitHub at build time
+- Excel column positions are hardcoded: F16 = col index 23 (X), F29 = col index 37 (AL). If the Excel structure changes, update `extract_excel_fields()` in the build script
+- BT-799 appears twice in the Excel (row 50 under BG-715, row 362 under BG-716) — both are extracted, the second has the actual F29=CM value
+- 3 code fields (BT-08, BT-770, BT-814) were manually added to `bt_codelist_map.json` — not in the EU SDK `fields.json` under those BT IDs
+- The `index.html` in this repo is the **generated output** — never edit it directly, edit the template and rebuild
+
 ## Key Files to Edit
 
 - **Template changes** (layout, CSS, JS filters): edit `eforms-overview-template.html` in `/Users/marina/bootcamp/`, then rebuild

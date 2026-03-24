@@ -32,3 +32,12 @@ git add index.html && git commit -m "Update overview" && git push
 ```
 
 Auto-deploys to Cloudflare on push.
+
+## Verifying Data Integrity
+
+```bash
+cd /Users/marina/bootcamp
+python3 -m pytest test_eforms_overview.py -v
+```
+
+25 tests verify the HTML matches the Excel source of truth, codelist mappings, and SDK values.
